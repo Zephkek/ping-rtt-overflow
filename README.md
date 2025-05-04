@@ -76,7 +76,7 @@ Modify the RTT computation to use a 128-bit intermediate and clamp:
 +    }
 ```
 
-## PoC Script (`tvv.py`)
+## PoC Script (`poc.py`)
 
 ```python
 #!/usr/bin/env python3
