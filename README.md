@@ -3,7 +3,7 @@
 
 ## Summary
 
-A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputils `ping` RTT calculation. By forging the timestamp field in the ICMP payload to be sufficiently large, the multiplication of seconds by 1,000,000 exceeds the signed `long` range, causing undefined behavior. Under AddressSanitizer (ASan), this is detected as a runtime error. In production builds it wraps silently and clamps to zero, resulting in repeated zero-RTT readings.
+A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputils `ping` RTT calculation. By forging the timestamp field in the ICMP payload to be sufficiently large, the multiplication of seconds by 1,000,000 exceeds the signed `long` range, causing undefined behavior. Under AddressSanitizer (ASan), this is detected as a runtime error. In non ASan builds it wraps silently and clamps to zero, resulting in repeated zero-RTT readings and incorrect statistics.
 
 ## Affected Versions
 
