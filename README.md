@@ -75,8 +75,8 @@ Modify the RTT computation to use a 128-bit intermediate and clamp:
 
 
 ```diff
---- a/ping_common.c
-+++ b/ping_common.c
+--- ping_common.c
++++ ping_common.c
 @@ -754,7 +754,15 @@ gather_statistics(struct ping_rts *rts, uint8_t *icmph, int icmplen,
         tvsub(tv, &tmp_tv);
 -       triptime = tv->tv_sec * 1000000 + tv->tv_usec;
