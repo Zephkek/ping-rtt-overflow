@@ -44,6 +44,8 @@ A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputil
    ```
 5. Without sanitizers, observe `time=0.000 ms` on every reply despite real latency and truncated/duplicate replies.
 
+https://github.com/user-attachments/assets/52ebf6e9-daf7-43ae-a1c9-03d3bf7bce7b
+
 ## Root Cause Analysis
 
 In `ping_common.c`, the code does:
