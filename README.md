@@ -18,31 +18,39 @@ A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputil
 
 ## Steps to Reproduce
 
-1. Check out the `master` branch of iputils and build with ASan:
+1. **Export ASan/UBSan build flags**
+
+   ```sh
+   export CFLAGS="-std=c99 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer"
+   export CXXFLAGS="$CFLAGS"
+   export LDFLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+   ```
+
+2. **Clone and build iputils with sanitizers**
 
    ```sh
    git clone https://github.com/iputils/iputils.git
    cd iputils
    mkdir builddir-asan && cd builddir-asan
-   meson .. -Denable-sanitizers=true
+   meson .. -Db_sanitize=address,undefined
    ninja
    ```
-2. In one terminal, start the PoC listener script (`poc.py`):
+3. In one terminal, start the PoC listener script (`poc.py`):
 
    ```sh
    sudo ./poc.py
    ```
-3. In another terminal, run ping:
+4. In another terminal, run ping:
 
    ```sh
    sudo ./ping/ping -R -s 64 127.0.0.1
    ```
-4. Observe signed-integer-overflow errors from ASan:
+5. Observe signed-integer-overflow errors from ASan:
 
    ```
    ../ping_common.c:757: runtime error: signed integer overflow
    ```
-5. Without sanitizers, observe `time=0.000 ms` on every reply despite real latency and truncated/duplicate replies.
+6. Without sanitizers, observe `time=0.000 ms` on every reply despite real latency and truncated/duplicate replies.
 
 https://github.com/user-attachments/assets/52ebf6e9-daf7-43ae-a1c9-03d3bf7bce7b
 
