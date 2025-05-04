@@ -3,7 +3,7 @@
 
 ## Summary
 
-A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in GNU `ping`’s RTT calculation. By forging the timestamp field in the ICMP payload to be sufficiently large, the multiplication of seconds by 1,000,000 exceeds the signed `long` range, causing undefined behavior. Under AddressSanitizer (ASan), this is detected as a runtime error. In production builds it wraps silently and clamps to zero, resulting in repeated zero-RTT readings.
+A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputils `ping` RTT calculation. By forging the timestamp field in the ICMP payload to be sufficiently large, the multiplication of seconds by 1,000,000 exceeds the signed `long` range, causing undefined behavior. Under AddressSanitizer (ASan), this is detected as a runtime error. In production builds it wraps silently and clamps to zero, resulting in repeated zero-RTT readings.
 
 ## Affected Versions
 
@@ -55,25 +55,29 @@ tvsub(&tv, &tmp_tv);
 triptime = tv.tv_sec * 1000000 + tv.tv_usec;
 ```
 
-Because `tv.tv_sec` is a signed 64-bit `long` and attacker controls it via the ICMP payload, multiplying by 1,000,000 can exceed `LONG_MAX`, causing signed overflow (CWE-190). The code does not check for overflow before or after the multiplication.
+Because `tv->tv_sec` is a signed 64-bit `long` and attacker controls it via the ICMP payload, multiplying by 1,000,000 can exceed `LONG_MAX`, causing signed overflow (CWE-190). The code does not check for overflow before or after the multiplication.
 
 ## Proposed Fix
 
 Modify the RTT computation to use a 128-bit intermediate and clamp:
 
+
 ```diff
 --- a/ping_common.c
 +++ b/ping_common.c
-@@ gather_statistics() {
--    triptime = tv.tv_sec * 1000000 + tv.tv_usec;
-+    __int128 delta = (__int128)tv.tv_sec * 1000000 + tv.tv_usec;
-+    if (delta < 0) {
-+        triptime = 0;
-+    } else if (delta > LLONG_MAX) {
-+        triptime = LONG_MAX;
-+    } else {
-+        triptime = (long)delta;
-+    }
+@@ -754,7 +754,15 @@ gather_statistics(struct ping_rts *rts, uint8_t *icmph, int icmplen,
+        tvsub(tv, &tmp_tv);
+-       triptime = tv->tv_sec * 1000000 + tv->tv_usec;
++       {
++           __int128 delta = (__int128)tv->tv_sec * 1000000 + tv->tv_usec;
++           if (delta < 0) {
++               triptime = 0;
++           } else if (delta > LLONG_MAX) {
++               triptime = (long)LLONG_MAX;
++           } else {
++               triptime = (long)delta;
++           }
++       }
 ```
 
 ## PoC Script (`poc.py`)
