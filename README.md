@@ -142,6 +142,10 @@ if __name__=='__main__':
 ```
 
 ----
-```
-Signed-off-by: Mohamed Maatallah <hotelsmaatallahrecemail@gmail.com>
-```
+
+---
+
+**Reported by:** Mohamed Maatallah  
+Email: [hotelsmaatallahrecemail@gmail.com](mailto:hotelsmaatallahrecemail@gmail.com)
+
+---
