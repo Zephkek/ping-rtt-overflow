@@ -64,7 +64,7 @@ In `ping_common.c`, the code does:
 /* normalize recv_time - send_time */
 tvsub(&tv, &tmp_tv);
 /* compute microseconds */
-triptime = tv.tv_sec * 1000000 + tv.tv_usec;
+triptime = tv->tv_sec * 1000000 + tv->tv_usec
 ```
 
 Because `tv->tv_sec` is a signed 64-bit `long` and attacker controls it via the ICMP payload, multiplying by 1,000,000 can exceed `LONG_MAX`, causing signed overflow (CWE-190). The code does not check for overflow before or after the multiplication.
