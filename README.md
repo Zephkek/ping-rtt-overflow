@@ -10,7 +10,7 @@ A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputil
 * iputils `ping` from the current `master` branch: [https://github.com/iputils/iputils/tree/master](https://github.com/iputils/iputils/tree/master)
 * Ubuntu package version: `iputils-ping 3:20240117-1build1`
 ## CVE ID
-CVE-2025-47268
+CVE-2025-47268 (Assigned 5/5/2025)
 
 ## Environment
 
