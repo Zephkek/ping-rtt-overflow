@@ -143,9 +143,15 @@ if __name__=='__main__':
     main()
 ```
 
-----
+Thought for a few seconds
 
-**Discovered & Reported by:** Mohamed Maatallah  
-Email: [hotelsmaatallahrecemail@gmail.com](mailto:hotelsmaatallahrecemail@gmail.com)
 
 ---
+### Discovered & Reported By
+
+**Name:** Mohamed Maatallah
+
+**Email:** [hotelsmaatallahrecemail@gmail.com](mailto:hotelsmaatallahrecemail@gmail.com)
+
+---
+
