@@ -6,9 +6,7 @@
 A crafted ICMP Echo Reply can trigger a signed 64-bit integer overflow in iputils `ping` RTT calculation. By forging the timestamp field in the ICMP payload to be sufficiently large, the multiplication of seconds by 1,000,000 exceeds the signed `long` range, causing undefined behavior. Under AddressSanitizer (ASan), this is detected as a runtime error. In non ASan builds it wraps silently and clamps to zero, resulting in repeated zero-RTT readings and incorrect statistics.
 
 ## Affected Versions
-
-* iputils `ping` from the current `master` branch: [https://github.com/iputils/iputils/tree/master](https://github.com/iputils/iputils/tree/master)
-* Ubuntu package version: `iputils-ping 3:20240117-1build1`
+iputils through version 20240905
 ## CVE ID
 CVE-2025-47268 (Assigned 5/5/2025)
 
